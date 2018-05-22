@@ -1,0 +1,75 @@
+{
+  "name": "cycle-starter",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@types/mocha": "^5.0.0",
+    "add-asset-html-webpack-plugin": "^2.1.3",
+    "address": "^1.0.3",
+    "autoprefixer": "^8.0.0",
+    "awesome-typescript-loader": "^5.0.0",
+    "clean-webpack-plugin": "^0.1.17",
+    "copy-webpack-plugin": "^4.3.1",
+    "cross-env": "^5.1.3",
+    "cross-spawn": "^6.0.5",
+    "css-loader": "^0.28.11",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^0.14.3",
+    "istanbul-instrumenter-loader-fix": "^3.1.0",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
+    "mini-css-extract-plugin": "^0.4.0",
+    "mocha": "^5.0.0",
+    "mocha-webpack": "^1.1.0",
+    "node-sass": "^4.7.2",
+    "nyc": "^11.4.1",
+    "opn": "^5.3.0",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-import": "^11.1.0",
+    "postcss-loader": "^2.1.5",
+    "postcss-modules": "^1.1.0",
+    "sass-loader": "^7.0.1",
+    "snabbdom-pragma": "^2.6.0",
+    "style-loader": "^0.21.0",
+    "typescript": "^2.8.3",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.3",
+    "webpack-dev-server": "^3.1.4",
+    "webpackbar": "^2.6.1"
+  },
+  "dependencies": {
+    "@cycle/dom": "^20.4.0",
+    "@cycle/history": "^6.10.0",
+    "@cycle/http": "^14.9.0",
+    "@cycle/isolate": "^3.3.0",
+    "@cycle/run": "^4.1.0",
+    "@cycle/storage": "^5.0.3",
+    "@cycle/time": "^0.13.0",
+    "cycle-onionify": "^5.0.0",
+    "cycle-storageify": "^4.0.1",
+    "cyclejs-utils": "^3.1.0",
+    "cyclic-router": "^5.1.7",
+    "switch-path": "^1.2.0",
+    "xstream": "^11.2.0"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --config configs/webpack.dev.config.js",
+    "test": "cross-env NODE_ENV=test nyc mocha-webpack --timeout=100000 --colors --webpack-config configs/webpack.config.test.js {src/components/**/*.{jsx,js,ts,tsx},test/**/*.test.{js,jsx,ts,tsx}}",
+    "build": "npm run build:dll && webpack --config configs/webpack.prod.config.js",
+    "clean": "rimraf build .tmp .nyc_output coverage",
+    "build:dll": "webpack --config configs/webpack.config.dll.js"
+  },
+  "nyc": {
+    "instrument": false,
+    "sourceMap": false,
+    "include": [
+      "src/components"
+    ],
+    "reporter": [
+      "html",
+      "text-summary"
+    ]
+  }
+}
