@@ -1,44 +1,27 @@
-import xs, { Stream } from 'xstream';
-import { VNode, DOMSource } from '@cycle/dom';
-import { StateSource } from 'cycle-onionify';
 import isolate from '@cycle/isolate';
-import { extractSinks } from 'cyclejs-utils';
 
-import { driverNames } from '../drivers';
-import { BaseSources, BaseSinks } from '../interfaces';
-import { RouteValue, routes, initialRoute } from '../routes';
+import {driverNames} from '../drivers';
+import {RouteValue, routes, initialRoute} from '../routes';
 
-import { State as CounterState } from './counter';
-import { State as SpeakerState } from './speaker';
+import {Observable} from "rxjs";
 
-export interface Sources extends BaseSources {
-    onion: StateSource<State>;
-}
-export interface Sinks extends BaseSinks {
-    onion?: Stream<Reducer>;
-}
 
-// State
-export interface State {
-    counter?: CounterState;
-    speaker?: SpeakerState;
-}
-export const defaultState: State = {
-    counter: { count: 5 },
+export const defaultState = {
+    counter: {count: 5},
+    test: {count: 5},
     speaker: undefined //use default state of component
 };
-export type Reducer = (prev?: State) => State | undefined;
 
-export function App(sources: Sources): Sinks {
-    const initReducer$ = xs.of<Reducer>(
+export function App(sources) {
+    const initReducer$ = Observable.of(
         prevState => (prevState === undefined ? defaultState : prevState)
     );
 
     const match$ = sources.router.define(routes);
 
     const componentSinks$ = match$.map(
-        ({ path, value }: { path: string; value: RouteValue }) => {
-            const { component, scope } = value;
+        ({path, value}: { path: string; value }) => {
+            const {component, scope} = value;
             return isolate(component, scope)({
                 ...sources,
                 router: sources.router.path(path)
@@ -46,9 +29,20 @@ export function App(sources: Sources): Sinks {
         }
     );
 
+    function extractSinks(sinks$,
+                          driverNames: string[]) {
+        return driverNames
+            .map(d => ({
+                [d]: sinks$
+                    .filter(s => !!s[d])
+                    .switchMap(s => s[d])
+            }))
+            .reduce((acc, curr) => Object.assign(acc, curr), {});
+    }
+
     const sinks = extractSinks(componentSinks$, driverNames);
     return {
         ...sinks,
-        onion: xs.merge(initReducer$, sinks.onion)
+        onion: Observable.merge(initReducer$, sinks.onion)
     };
 }

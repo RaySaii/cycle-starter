@@ -12,12 +12,12 @@ module.exports = {
     output: {
         filename: 'app.js',
         path: appPath('build'),
-        // publicPath: '/'
+        publicPath: '/'
     },
     mode: 'development',
     devServer: {
-        quiet: true,
         hot: true,
+      historyApiFallback: true,
     },
     module: {
         rules: [
@@ -36,9 +36,7 @@ module.exports = {
                             ident: 'postcss',
                             plugins: (loader) => [
                                 require('postcss-import')({ root: loader.resourcePath }),
-                                require('postcss-cssnext')(),
-                                require('autoprefixer')({ browsers: [ 'last 5 versions' ] }),
-                                require('cssnano')(),
+                                require('postcss-cssnext')({ browsers: [ 'last 5 versions' ] }),
                             ]
                         }
                     },
@@ -53,10 +51,10 @@ module.exports = {
             chunkFilename: '[id].css',
         }),
         new webpack.HotModuleReplacementPlugin(),
-        new WebpackBar({
-            done: function (sharedState, ctx) {
-                console.log(`\n\n   local:  http://localhost:8080 \n  remote:  http://${address.ip()}:8080\n\n`)
-            }
-        }),
+        // new WebpackBar({
+        //     done: function (sharedState, ctx) {
+        //         console.log(`\n\n   local:  http://localhost:8080 \n  remote:  http://${address.ip()}:8080\n\n`)
+        //     }
+        // }),
     ]
 }

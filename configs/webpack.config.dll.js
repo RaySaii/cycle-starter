@@ -5,7 +5,7 @@ const appPath = (...names) => path.join(process.cwd(), ...names);
 module.exports = {
     mode:'production',
     entry: {
-        vendor: ['@cycle/dom', '@cycle/history','@cycle/http','@cycle/isolate','@cycle/run','@cycle/storage','@cycle/time','cycle-onionify'] // cycle模块打包到一个动态连接库
+        vendor: ['@cycle/dom', '@cycle/history','@cycle/http','@cycle/isolate','@cycle/run','cycle-onionify'] // cycle模块打包到一个动态连接库
     },
     output: {
         path: appPath('dll'),

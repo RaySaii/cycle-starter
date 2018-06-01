@@ -1,11 +1,9 @@
-import { run } from '@cycle/run'
+import run from '@cycle/rxjs-run'
 
 import { buildDrivers, wrapMain } from './drivers'
-import { Component } from './interfaces'
 import { App } from './components/app'
 
-const main: Component = wrapMain(App)
-const DEV = process.env.NODE_ENV === 'development'
+const main = wrapMain(App)
 
 run(main as any, buildDrivers(([k, t]) => [k, t()]))
 

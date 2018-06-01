@@ -7,10 +7,10 @@ import { BaseSources, BaseSinks } from '../interfaces';
 
 // Types
 export interface Sources extends BaseSources {
-    onion: StateSource<State>;
+    onion?: StateSource<State>;
 }
 export interface Sinks extends BaseSinks {
-    onion: Stream<Reducer>;
+    onion?: Stream<Reducer>;
 }
 
 // State

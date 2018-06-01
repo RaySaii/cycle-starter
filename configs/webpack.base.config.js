@@ -60,8 +60,8 @@ module.exports = {
             // hash: true
         }),
         new webpack.DllReferencePlugin({
-            context: appPath(),
-            manifest,
+          manifest,
+          context: appPath(),
             extensions: [ '.js', '.jsx' ]
         }),
         new AddAssetHtmlPlugin({
